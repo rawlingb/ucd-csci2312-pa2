@@ -6,6 +6,7 @@
 
 #include "ErrorContext.h"
 #include "ClusteringTests.h"
+#include "Point.h"
 
 using std::cout;
 using std::endl;
@@ -15,6 +16,8 @@ using namespace Testing;
 int main() {
 
     const int NumIters = 3;
+
+
 
     cout << endl << "Testing PA2!!" << endl << endl;
 

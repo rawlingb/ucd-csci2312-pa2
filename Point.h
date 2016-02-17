@@ -22,10 +22,10 @@ namespace Clustering {
         ~Point();
 
         // Accessors & mutators
-        int getId() const;
-        int getDims() const;
-        void setValue(int, double);
-        double getValue(int) const;
+        int getId() const {return __id;};
+        int getDims() const {return __dim;};
+        void setValue(int index, double value) {__values[index] = value;};
+        double getValue(int index) const {return __values[index];};
 
         // Functions
         double distanceTo(const Point &) const;
@@ -56,6 +56,7 @@ namespace Clustering {
 
         friend std::ostream &operator<<(std::ostream &, const Point &);
         friend std::istream &operator>>(std::istream &, Point &);
+
     };
 
 }
