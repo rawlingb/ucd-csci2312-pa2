@@ -26,13 +26,7 @@ namespace Clustering {
 
     //Copy Constructor
     Point::Point(const Point &point) {
-		//if (&point == nullptr)
-			//return;
-        __id = point.__id;
-        __dim = point.__dim;
-        __values = new double[point.__dim];
-        for (int count = 0; count < __dim; count++)
-            __values[count] = point.__values[count];
+		copy(point);
     }
 
     //Destructor
@@ -45,8 +39,16 @@ namespace Clustering {
         if(*this == rhs)
             return *this;
         this->~Point();
-        Point* lhs = new Point(rhs);
-        return *lhs;
+        copy(rhs);
+        return *this;
+    }
+
+    void Point::copy(const Point &point) {
+        __id = point.__id;
+        __dim = point.__dim;
+        __values = new double[point.__dim];
+        for (int count = 0; count < __dim; count++)
+            __values[count] = point.__values[count];
     }
 
     double Point::distanceTo(const Point &point) const {

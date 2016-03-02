@@ -1,9 +1,12 @@
 //
 // Created by Brian on 2/16/2016.
 //
-//TODO think about the usage of subscripts in the program
+//TODO !__points and assert(size == 0) or (!size)
 #include "Point.h"
 #include "Cluster.h"
+#include <string>
+#include <algorithm>
+#include <sstream>
 
 Clustering::LNode::LNode(const Clustering::Point &p, Clustering::LNodePtr n) :
         point(p), next(n){ }
@@ -11,13 +14,7 @@ Clustering::LNode::LNode(const Clustering::Point &p, Clustering::LNodePtr n) :
 Clustering::Cluster::Cluster() : __points (nullptr), __size(0){ }
 
 Clustering::Cluster::Cluster(const Clustering::Cluster &cluster) {
-    __size = 0;
-    __points = nullptr;
-    LNode* iterate = cluster.__points;
-    for(int count = 0; count < cluster.__size; count++) {
-        this->add(iterate->point);
-        iterate = iterate->next;
-    }
+	__cpy(cluster.__points, cluster.__size);
 }
 
 Clustering::Cluster &Clustering::Cluster::operator=(const Clustering::Cluster &cluster) {
@@ -25,14 +22,25 @@ Clustering::Cluster &Clustering::Cluster::operator=(const Clustering::Cluster &c
         return *this;
     }
     this->~Cluster();
-    Cluster* newCluster = new Cluster(cluster);
-    return *newCluster;
+	__cpy(cluster.__points, cluster.__size);
+    return *this;
+}
+
+void Clustering::Cluster::__cpy(LNodePtr pts, int size) {
+	__size = 0;
+	__points = nullptr;
+	LNode* iterate = pts;
+	for (int count = 0; count < size; count++) {
+		this->add(iterate->point);
+		iterate = iterate->next;
+	}
 }
 
 Clustering::Cluster::~Cluster() {
 	while (__size > 0) {
 		remove(__points->point);
 	}
+	__points = nullptr;
 }
 
 
@@ -61,11 +69,6 @@ void Clustering::Cluster::add(const Clustering::Point &point) {
             bool placed = false;
             LNode *iterateNext = __points;
 			LNode *iteratePrev = __points;
-			//Size 3
-			//Both point to ele 0
-			//1. next to 1(2) prev to 0(1)
-			//2. next to 2(nullptr) prev to 1(2)
-			//3. next to nullptr prev to 2(nullptr)
             while (count < __size && !placed) {
                 if (point < iterateNext->point) {
 					if (iterateNext == __points) {
@@ -142,8 +145,7 @@ const Clustering::Point &Clustering::Cluster::remove(const Clustering::Point &po
         }
 
     }
-    Point *p = nullptr;
-    return *p;//TODO Implement contains and consider CAssert
+    return point;//TODO RETURN THE ARGUMENT
 }
 
 bool Clustering::Cluster::contains(const Clustering::Point &point) {
@@ -215,7 +217,7 @@ Clustering::Cluster &Clustering::Cluster::operator-=(const Clustering::Cluster &
 }
 
 const Clustering::Cluster Clustering::operator+(const Cluster &cluster, const Cluster &cluster1) {
-    Cluster c(cluster);//TODO Think about implementation
+    Cluster c(cluster);
     c+=cluster1;
     return c;
 }
@@ -260,8 +262,17 @@ std::ostream &Clustering::operator<<(std::ostream &ostream, const Clustering::Cl
 }
 
 std::istream &Clustering::operator>>(std::istream &istream, Clustering::Cluster &cluster) {
-    LNode *iterate = cluster.__points;
-    for(int count = 0; count < cluster.__size; count++)
-        istream >> iterate->point;
+	std::string str;
+    //LNode *iterate = cluster.__points;
+	std::stringstream sstream(str);
+	while(istream) {
+		int dim;
+		istream >> str;
+		std::cout << str << std::endl;
+		dim = (std::count(str.begin(), str.end(), ',')-1);
+		Point p(dim);
+		sstream >> p;
+		cluster.add(p);
+	}
     return istream;
 }

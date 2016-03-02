@@ -21,6 +21,8 @@ namespace Clustering {
         Point &operator=(const Point &);
         ~Point();
 
+        void copy(const Point &);
+
         // Accessors & mutators
         int getId() const {return __id;};
         int getDims() const {return __dim;};

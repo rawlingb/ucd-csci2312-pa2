@@ -21,7 +21,7 @@ namespace Clustering {
         LNodePtr __points;
 
         //void __del();
-        //void __cpy(LNodePtr pts);
+        void __cpy(LNodePtr pts, int size);
         //bool __in(const Point &p) const;
 
 
