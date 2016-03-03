@@ -5,7 +5,6 @@
 #include "Point.h"
 #include "Cluster.h"
 #include <string>
-#include <algorithm>
 #include <sstream>
 
 Clustering::LNode::LNode(const Clustering::Point &p, Clustering::LNodePtr n) :
@@ -263,13 +262,17 @@ std::ostream &Clustering::operator<<(std::ostream &ostream, const Clustering::Cl
 
 std::istream &Clustering::operator>>(std::istream &istream, Clustering::Cluster &cluster) {
 	std::string str;
-    //LNode *iterate = cluster.__points;
-	std::stringstream sstream(str);
-	while(istream) {
-		int dim;
-		istream >> str;
-		std::cout << str << std::endl;
-		dim = (std::count(str.begin(), str.end(), ',')-1);
+	while(getline(istream, str)) {
+		int dim = 1;
+		for (int count = 0; count < str.length(); count++) {
+			if (isspace(str[count]))
+				str.erase(count--, 1);
+		}
+        for (int count = 0; count < str.length(); count++) {
+            if (ispunct(str[count]))
+                dim++;
+        }
+		std::stringstream sstream(str);
 		Point p(dim);
 		sstream >> p;
 		cluster.add(p);
