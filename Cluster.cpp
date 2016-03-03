@@ -144,7 +144,7 @@ const Clustering::Point &Clustering::Cluster::remove(const Clustering::Point &po
         }
 
     }
-    return point;//TODO RETURN THE ARGUMENT
+    return point;
 }
 
 bool Clustering::Cluster::contains(const Clustering::Point &point) {
@@ -169,7 +169,6 @@ bool Clustering::Cluster::contains(const Clustering::Point &point) {
 }
 
 const Clustering::Point &Clustering::Cluster::operator[](unsigned int index) const {
-    //TODO Cassert
     int count = 0;
     LNode *iterate = __points;
     for(count = 0; count < __size && count != index; iterate = iterate->next)
